@@ -1,0 +1,70 @@
+$(eval $(call addlib_s,libcxx,$(CONFIG_LIBCXX)))
+
+CXXINCLUDES-$(CONFIG_LIBCXX) += -I$(LIBCXX_BASE)/include
+CINCLUDES-$(CONFIG_LIBCXX) += -I$(LIBCXX_BASE)/include
+
+CONFIG_FLAGS 	+= -D_LIBCPP_PROVIDES_DEFAULT_RUNE_TABLE
+
+ifdef CONFIG_CXX_THREADS
+CONFIG_FLAGS += -D__linux__ -D_LIBCPP_HAS_THREAD_API_PTHREAD
+else
+CONFIG_FLAGS += -D_LIBCPP_HAS_NO_THREADS
+endif
+
+LIBCXX_CFLAGS-y    +=   $(CONFIG_FLAGS) -D_LIBCPP_BUILDING_LIBRARY -DLIBCXX_BUILDING_LIBCXXABI -I$(LIBCXX_BASE)/src
+LIBCXX_CXXFLAGS-y    +=   $(CONFIG_FLAGS) -D_LIBCPP_BUILDING_LIBRARY -DLIBCXX_BUILDING_LIBCXXABI -I$(LIBCXX_BASE)/src -std=c++20
+
+LIBCXX_SUPPRESS_FLAGS += -Wall -Wextra -W -Wwrite-strings \
+		-Wno-unused-parameter -Wno-cpp \
+		-Wno-long-long -Werror=return-type \
+		-Wundef -Wformat-nonliteral -Wno-attributes \
+		-Wno-undef
+LIBCXX_CFLAGS-y   += $(LIBCXX_SUPPRESS_FLAGS)
+LIBCXX_CXXFLAGS-y += $(LIBCXX_SUPPRESS_FLAGS) -Wextra-semi -Wno-literal-suffix -Wno-c++14-compat -Wno-noexcept-type -Wno-suggest-override
+
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/glue.c
+
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/algorithm.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/any.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/atomic.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/barrier.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/bind.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/charconv.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/chrono.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/condition_variable.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/condition_variable_destructor.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/exception.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/functional.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/future.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/hash.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/legacy_pointer_safety.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/memory.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/mutex.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/mutex_destructor.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/new.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/optional.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/random_shuffle.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/ryu/d2fixed.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/ryu/d2s.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/ryu/f2s.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/shared_mutex.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/stdexcept.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/string.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/system_error.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/thread.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/typeinfo.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/utility.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/valarray.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/variant.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/vector.cpp
+
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/random.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/ios.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/ios.instantiations.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/iostream.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/locale.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/regex.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/strstream.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/filesystem/operations.cpp
+LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/filesystem/directory_iterator.cpp
+#LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/filesystem/int128_builtins.cpp

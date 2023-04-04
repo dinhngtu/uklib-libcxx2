@@ -24,6 +24,8 @@
 
 #ifdef __cplusplus
 
+#include <__config_unikraft>
+
 #define _LIBCPP_VERSION 14000
 
 #ifndef _LIBCPP_ABI_VERSION
