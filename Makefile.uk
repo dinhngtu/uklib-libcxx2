@@ -11,9 +11,6 @@ else
 CONFIG_FLAGS += -D_LIBCPP_HAS_NO_THREADS
 endif
 
-LIBCXX_CFLAGS-y    +=   $(CONFIG_FLAGS) -D_LIBCPP_BUILDING_LIBRARY -DLIBCXX_BUILDING_LIBCXXABI -I$(LIBCXX_BASE)/src
-LIBCXX_CXXFLAGS-y    +=   $(CONFIG_FLAGS) -D_LIBCPP_BUILDING_LIBRARY -DLIBCXX_BUILDING_LIBCXXABI -I$(LIBCXX_BASE)/src -std=c++20
-
 LIBCXX_SUPPRESS_FLAGS += -Wall -Wextra -W -Wwrite-strings \
 		-Wno-unused-parameter -Wno-cpp \
 		-Wno-long-long -Werror=return-type \
@@ -59,12 +56,21 @@ LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/variant.cpp
 LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/vector.cpp
 
 LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/random.cpp
+
+ifeq ($(CONFIG_LIBMUSL_LOCALE),y)
 LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/ios.cpp
 LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/ios.instantiations.cpp
 LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/iostream.cpp
 LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/locale.cpp
 LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/regex.cpp
 LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/strstream.cpp
+else
+CONFIG_FLAGS-y += -D_LIBCPP_HAS_NO_LOCALIZATION
+endif
+
 LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/filesystem/operations.cpp
 LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/filesystem/directory_iterator.cpp
 #LIBCXX_SRCS-y += $(LIBCXX_BASE)/src/filesystem/int128_builtins.cpp
+
+LIBCXX_CFLAGS-y    +=   $(CONFIG_FLAGS) -D_LIBCPP_BUILDING_LIBRARY -DLIBCXX_BUILDING_LIBCXXABI -I$(LIBCXX_BASE)/src
+LIBCXX_CXXFLAGS-y    +=   $(CONFIG_FLAGS) -D_LIBCPP_BUILDING_LIBRARY -DLIBCXX_BUILDING_LIBCXXABI -I$(LIBCXX_BASE)/src -std=c++20
